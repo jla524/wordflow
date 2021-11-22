@@ -37,4 +37,4 @@ if __name__ == '__main__':
     reddit = get_reddit()
     posts = get_posts(reddit, 'dataengineering', limit=25)
     posts = to_frame(posts)
-    print(posts)
+    posts.to_csv('posts.csv', index=False)
