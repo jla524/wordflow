@@ -33,8 +33,13 @@ def to_frame(results: list[list[any]]) -> DataFrame:
     return results
 
 
-if __name__ == '__main__':
+def scrape() -> None:
+    """Get post data from r/dataengineering and save as csv"""
     reddit = get_reddit()
     posts = get_posts(reddit, 'dataengineering', limit=25)
     posts = to_frame(posts)
     posts.to_csv('posts.csv', index=False)
+
+
+if __name__ == '__main__':
+    scrape()
