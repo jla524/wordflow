@@ -4,6 +4,9 @@ Create a Directed Acyclic Graph (DAG) in Airflow.
 """
 from datetime import timedelta
 from airflow import DAG, utils
+from airflow.operators.python import PythonOperator
+from scraper import scrape
+from word_cloud import make
 
 default_args = {
     'owner': 'jla524',
@@ -18,4 +21,16 @@ default_args = {
 
 dag = DAG('reddit_dag', default_args=default_args, schedule_interval='@daily')
 
-# TODO: Use PythonOperator to define tasks
+scrape_posts = PythonOperator(
+    task_id='scrape_posts',
+    python_callable=scrape,
+    dag=dag
+)
+
+make_cloud = PythonOperator(
+    task_id='make_cloud',
+    python_callable=make,
+    dag=dag
+)
+
+make_cloud.set_upstream(scrape_posts)
