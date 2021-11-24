@@ -19,18 +19,18 @@ default_args = {
     'retry_delay': timedelta(minutes=5)
 }
 
-dag = DAG('reddit_dag', default_args=default_args, schedule_interval='@daily')
+with DAG('reddit_dag', default_args=default_args,
+         schedule_interval='@daily') as dag:
+    scrape_posts = PythonOperator(
+        task_id='scrape_posts',
+        python_callable=scrape,
+        dag=dag
+    )
 
-scrape_posts = PythonOperator(
-    task_id='scrape_posts',
-    python_callable=scrape,
-    dag=dag
-)
+    make_cloud = PythonOperator(
+        task_id='make_cloud',
+        python_callable=make,
+        dag=dag
+    )
 
-make_cloud = PythonOperator(
-    task_id='make_cloud',
-    python_callable=make,
-    dag=dag
-)
-
-make_cloud.set_upstream(scrape_posts)
+    scrape_posts >> make_cloud
