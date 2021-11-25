@@ -3,6 +3,7 @@
 A reddit scraper to get posts from subreddits
 Adapted from https://towardsdatascience.com/scraping-reddit-data-1c0af3040768
 """
+from typing import List
 from praw import Reddit
 from pandas import DataFrame
 from dotenv import dotenv_values
@@ -18,7 +19,7 @@ def get_reddit() -> Reddit:
 
 
 def get_posts(instance: Reddit, subreddit: str,
-              limit: int = 10) -> list[list[any]]:
+              limit: int = 10) -> List[List]:
     """Store top 10 posts in a list"""
     new_posts = instance.subreddit(subreddit).new(limit=limit)
     results = [[post.title, post.score, post.id, post.url,
@@ -26,7 +27,7 @@ def get_posts(instance: Reddit, subreddit: str,
     return results
 
 
-def to_frame(results: list[list[any]]) -> DataFrame:
+def to_frame(results: List[List]) -> DataFrame:
     """Convert results to DataFrame"""
     columns = ['title', 'score', 'id', 'url', 'body', 'created']
     results = DataFrame(results, columns=columns)
