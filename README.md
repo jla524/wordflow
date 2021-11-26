@@ -3,7 +3,6 @@
 An automated data pipeline. Built with [Airflow][1] and [Docker][2].
 
 ## TODO
-- Write a Config class to store paths
 - Store the data in a database
 
 
