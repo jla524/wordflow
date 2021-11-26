@@ -3,8 +3,11 @@
 Create a Directed Acyclic Graph (DAG) in Airflow.
 """
 from datetime import timedelta
+
 from airflow import DAG, utils
 from airflow.operators.python import PythonOperator
+from airflow.operators.email import EmailOperator
+
 from scraper import scrape
 from word_cloud import make
 
@@ -36,4 +39,13 @@ with DAG(
         dag=dag
     )
 
-    scrape_posts.set_downstream(make_cloud)
+    send_email = EmailOperator(
+        task_id='send_email',
+        to='jla524@sfu.ca',
+        subject='Generated Wordcloud',
+        html_content='',
+        files=['/opt/airflow/image/wordcloud.png'],
+        dag=dag
+    )
+
+    scrape_posts >> make_cloud >> send_email

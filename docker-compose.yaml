@@ -60,7 +60,8 @@ x-airflow-common:
     AIRFLOW__API__AUTH_BACKEND: 'airflow.api.auth.backend.basic_auth'
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- pandas praw python-dotenv wordcloud}
   volumes:
-    - ./.env:/opt/airflow/dags
+    - ./airflow.cfg:/usr/local/airflow/airflow.cfg
+    - ./.env:/opt/airflow/env/.env
     - ./src:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
