@@ -3,12 +3,14 @@
 Create a word cloud using text from posts
 This may take a while to run
 """
-from pathlib import Path
 from string import punctuation
+
 import numpy as np
 import matplotlib.pyplot as plt
 from pandas import read_csv
 from wordcloud import WordCloud
+
+from config import Config
 
 
 def clean_text(text: str) -> str:
@@ -18,7 +20,7 @@ def clean_text(text: str) -> str:
 
 def make() -> None:
     """Read posts from CSV and generate a word cloud"""
-    posts = read_csv('/opt/airflow/data/posts.csv')
+    posts = read_csv(Config.posts_file())
     title = posts['title'].apply(clean_text)
     body = posts['body'].fillna('').apply(clean_text)
     words = np.concatenate((title, body), axis=None)
@@ -29,9 +31,8 @@ def make() -> None:
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')
 
-    image_path = Path('/opt/airflow/image')
-    image_path.mkdir(exist_ok=True)
-    plt.savefig(image_path / 'wordcloud.png')
+    Config.image_dir().mkdir(exist_ok=True)
+    plt.savefig(Config.wordcloud_file())
 
 
 if __name__ == '__main__':

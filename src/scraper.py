@@ -3,24 +3,29 @@
 A reddit scraper to get posts from subreddits
 Adapted from https://towardsdatascience.com/scraping-reddit-data-1c0af3040768
 """
-from pathlib import Path
 from typing import List
+
 from praw import Reddit
 from pandas import DataFrame
 from dotenv import dotenv_values
+
+from config import Config
 
 
 def get_reddit() -> Reddit:
     """Load config and create a Reddit instance"""
     config = dotenv_values('/opt/airflow/env/.env')
-    instance = Reddit(client_id=config['CLIENT_ID'],
-                      client_secret=config['CLIENT_SECRET'],
-                      user_agent=config['USER_AGENT'])
+    instance = Reddit(
+        client_id=config['CLIENT_ID'],
+        client_secret=config['CLIENT_SECRET'],
+        user_agent=config['USER_AGENT']
+    )
     return instance
 
 
-def get_posts(instance: Reddit, subreddit: str,
-              limit: int = 10) -> List[List]:
+def get_posts(instance: Reddit,
+              subreddit: str,
+              limit: int = 100) -> List[List]:
     """Store top 10 posts in a list"""
     new_posts = instance.subreddit(subreddit).new(limit=limit)
     results = [[post.title, post.score, post.id, post.url,
@@ -40,9 +45,9 @@ def scrape() -> None:
     reddit = get_reddit()
     posts = get_posts(reddit, 'dataengineering', limit=25)
     posts = to_frame(posts)
-    data_path = Path('/opt/airflow/data')
-    data_path.mkdir(exist_ok=True)
-    posts.to_csv(data_path / 'posts.csv', index=False)
+
+    Config.data_dir().mkdir(exist_ok=True)
+    posts.to_csv(Config.posts_file(), index=False)
 
 
 if __name__ == '__main__':

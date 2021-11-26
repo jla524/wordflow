@@ -10,6 +10,7 @@ from airflow.operators.email import EmailOperator
 
 from scraper import scrape
 from word_cloud import make
+from config import Config
 
 default_args = {
     'owner': 'jla524',
@@ -44,7 +45,7 @@ with DAG(
         to='jla524@sfu.ca',
         subject='Generated Wordcloud',
         html_content='',
-        files=['/opt/airflow/image/wordcloud.png'],
+        files=[Config.wordcloud_file()],
         dag=dag
     )
 
