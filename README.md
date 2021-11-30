@@ -1,19 +1,16 @@
 # wordflow
+![wordcloud][1]
 
-An automated data pipeline. Built with [Airflow][1] and [Docker][2].
-
-## DAG
-![workflow][3]
-
-## Output
-![wordcloud][4]
+## Directed Acyclic Graph (DAG)
+![workflow][2]
+- scrape_posts: get the newest 100 posts from r/dataengineering and save as CSV
+- make_cloud: create a word cloud using the CSV data
+- send_email: send an email with the word cloud attached
 
 ## TODO
 - Store the data in a database
 - Exclude URLs when generating word cloud
 
 
-[1]: https://airflow.apache.org
-[2]: https://www.docker.com
-[3]: https://github.com/jla524/wordflow/blob/assets/workflow.png?raw=true
-[4]: https://github.com/jla524/wordflow/blob/assets/wordcloud.png?raw=true
+[1]: https://github.com/jla524/wordflow/blob/assets/wordcloud.png?raw=true
+[2]: https://github.com/jla524/wordflow/blob/assets/workflow.png?raw=true
