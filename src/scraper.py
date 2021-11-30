@@ -26,7 +26,7 @@ def get_reddit() -> Reddit:
 def get_posts(instance: Reddit,
               subreddit: str,
               limit: int = 100) -> List[List]:
-    """Store top 10 posts in a list"""
+    """Store the newest n posts in a list"""
     new_posts = instance.subreddit(subreddit).new(limit=limit)
     results = [[post.title, post.score, post.id, post.url,
                 post.selftext, post.created] for post in new_posts]
