@@ -17,7 +17,7 @@ default_args = {
     'depends_on_past': False,
     'start_date': utils.dates.days_ago(1),
     'email': ['jla524@sfu.ca'],
-    'email_on_failure': False,
+    'email_on_failure': True,
     'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=1)
